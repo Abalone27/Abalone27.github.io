@@ -28,6 +28,31 @@
     </entry>
     
     
+    
+    <entry>
+      <title>计算机科学分支 CS Map</title>
+      <link href="/2024/10/21/ji-suan-ji-fen-zhi/"/>
+      <url>/2024/10/21/ji-suan-ji-fen-zhi/</url>
+      
+        <content type="html"><![CDATA[<h1 id="Computer-Science-Map"><a href="#Computer-Science-Map" class="headerlink" title="Computer Science Map"></a>Computer Science Map</h1><h2 id="计算机科学基础理论（Theroy）"><a href="#计算机科学基础理论（Theroy）" class="headerlink" title="计算机科学基础理论（Theroy）"></a>计算机科学基础理论（Theroy）</h2><h5 id="1-计算性理论-computability-theroy"><a href="#1-计算性理论-computability-theroy" class="headerlink" title="1. 计算性理论 computability theroy"></a>1. 计算性理论 computability theroy</h5><h5 id="2-算法-algorithm"><a href="#2-算法-algorithm" class="headerlink" title="2. 算法 algorithm"></a>2. 算法 algorithm</h5><h5 id="3-信息论-information-theroy"><a href="#3-信息论-information-theroy" class="headerlink" title="3. 信息论 information theroy"></a>3. 信息论 information theroy</h5><h5 id="4-密码学-cryptography"><a href="#4-密码学-cryptography" class="headerlink" title="4. 密码学 cryptography"></a>4. 密码学 cryptography</h5><h5 id="5-其他（逻辑、图论、计算几何、自动机理论、量子计算、并行编程、形式化方法、数据结构）"><a href="#5-其他（逻辑、图论、计算几何、自动机理论、量子计算、并行编程、形式化方法、数据结构）" class="headerlink" title="5. 其他（逻辑、图论、计算几何、自动机理论、量子计算、并行编程、形式化方法、数据结构）"></a>5. 其他（逻辑、图论、计算几何、自动机理论、量子计算、并行编程、形式化方法、数据结构）</h5><h2 id="计算机工程（engineering）"><a href="#计算机工程（engineering）" class="headerlink" title="计算机工程（engineering）"></a>计算机工程（engineering）</h2><h5 id="1-处理机调度"><a href="#1-处理机调度" class="headerlink" title="1. 处理机调度"></a>1. 处理机调度</h5><h5 id="2-计算机体系结构-architecure"><a href="#2-计算机体系结构-architecure" class="headerlink" title="2. 计算机体系结构 architecure"></a>2. 计算机体系结构 architecure</h5><h5 id="3-软件与编程语言"><a href="#3-软件与编程语言" class="headerlink" title="3. 软件与编程语言"></a>3. 软件与编程语言</h5><h5 id="4-编译器-compilers"><a href="#4-编译器-compilers" class="headerlink" title="4. 编译器 compilers"></a>4. 编译器 compilers</h5><h5 id="5-操作系统-operating-systems"><a href="#5-操作系统-operating-systems" class="headerlink" title="5. 操作系统 operating systems"></a>5. 操作系统 operating systems</h5><h5 id="6-软件工程-software-engineering"><a href="#6-软件工程-software-engineering" class="headerlink" title="6. 软件工程 software engineering"></a>6. 软件工程 software engineering</h5><h5 id="7-网络-networking"><a href="#7-网络-networking" class="headerlink" title="7. 网络 networking"></a>7. 网络 networking</h5><h5 id="8-数据管理-data-management"><a href="#8-数据管理-data-management" class="headerlink" title="8. 数据管理 data management"></a>8. 数据管理 data management</h5><h5 id="9-性能-performance"><a href="#9-性能-performance" class="headerlink" title="9. 性能 performance"></a>9. 性能 performance</h5><h5 id="10-图形学-graphics"><a href="#10-图形学-graphics" class="headerlink" title="10. 图形学 graphics"></a>10. 图形学 graphics</h5><h2 id="应用（Applications）"><a href="#应用（Applications）" class="headerlink" title="应用（Applications）"></a>应用（Applications）</h2><h5 id="1-优化-optimization"><a href="#1-优化-optimization" class="headerlink" title="1. 优化 optimization"></a>1. 优化 optimization</h5><h5 id="2-布尔可满足性问题-boolean-satisfiability（SAT）"><a href="#2-布尔可满足性问题-boolean-satisfiability（SAT）" class="headerlink" title="2. 布尔可满足性问题 boolean satisfiability（SAT）"></a>2. 布尔可满足性问题 boolean satisfiability（SAT）</h5><h5 id="3-人工智能-artificial-intelligence"><a href="#3-人工智能-artificial-intelligence" class="headerlink" title="3. 人工智能 artificial intelligence"></a>3. 人工智能 artificial intelligence</h5><h5 id="4-机器学习-machine-learning"><a href="#4-机器学习-machine-learning" class="headerlink" title="4. 机器学习 machine learning"></a>4. 机器学习 machine learning</h5><ol><li>计算机视觉 computer vision</li></ol><ul><li>图像处理技术 image processing techniques</li></ul><ol start="2"><li>自然语言处理 natural language processing</li></ol><h5 id="5-大数据-big-data"><a href="#5-大数据-big-data" class="headerlink" title="5. 大数据 big data"></a>5. 大数据 big data</h5><h5 id="6-物联网-Internet-of-things"><a href="#6-物联网-Internet-of-things" class="headerlink" title="6. 物联网 Internet of things"></a>6. 物联网 Internet of things</h5><h5 id="7-hacking"><a href="#7-hacking" class="headerlink" title="7. hacking"></a>7. hacking</h5><h5 id="8-计算科学-computational-science"><a href="#8-计算科学-computational-science" class="headerlink" title="8. 计算科学 computational science"></a>8. 计算科学 computational science</h5><h5 id="9-超算-supter-computing"><a href="#9-超算-supter-computing" class="headerlink" title="9. 超算 supter computing"></a>9. 超算 supter computing</h5><h5 id="10-人机交互-human-computer-interacting"><a href="#10-人机交互-human-computer-interacting" class="headerlink" title="10. 人机交互 human computer interacting"></a>10. 人机交互 human computer interacting</h5><h5 id="11。-机器人学-robitics"><a href="#11。-机器人学-robitics" class="headerlink" title="11。 机器人学 robitics"></a>11。 机器人学 robitics</h5>]]></content>
+      
+      
+      <categories>
+          
+          <category> 计算机科学 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 计算机科学导航 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
   
   
 </search>
