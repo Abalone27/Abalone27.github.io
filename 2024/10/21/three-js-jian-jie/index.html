@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <!-- title -->
+<!-- keywords -->
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="author" content="Bao YuXiang">
+    <meta name="renderer" content="webkit">
+    <meta name="copyright" content="Bao YuXiang">
+        <meta name="keywords" content="hexo,hexo-theme,hexo-blog">
+    <meta name="description" content="欢迎来到我的博客！">
+    <meta name="description" content="Three.Js 介绍Three.js由Ricardo Cabello在2010四月于GitHub首次发布。  Three.js是一个跨浏览器的使用JavaScript函数库或API来在网页浏览器中创建和展示三维计算机图形的开源通用 3D 代码库。Three.js使用WebGL渲染图形，也可通过插件使用 WebGPU（实验性）、SVG 和 CSS3D 渲染器。源代码托管在GitHub。 Insta">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Three.Js简介">
+<meta property="og:url" content="http://abalone27.github.io/2024/10/21/three-js-jian-jie/index.html">
+<meta property="og:site_name" content="Abalone27s Blog">
+<meta property="og:description" content="Three.Js 介绍Three.js由Ricardo Cabello在2010四月于GitHub首次发布。  Three.js是一个跨浏览器的使用JavaScript函数库或API来在网页浏览器中创建和展示三维计算机图形的开源通用 3D 代码库。Three.js使用WebGL渲染图形，也可通过插件使用 WebGPU（实验性）、SVG 和 CSS3D 渲染器。源代码托管在GitHub。 Insta">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://abalone27.github.io/Users/baoyuxiang/Library/Application%20Support/typora-user-images/%E6%88%AA%E5%B1%8F2024-10-17%2019.08.46.png">
+<meta property="article:published_time" content="2024-10-21T08:33:28.000Z">
+<meta property="article:modified_time" content="2024-10-21T08:35:30.848Z">
+<meta property="article:author" content="Bao YuXiang">
+<meta property="article:tag" content="前端 javascript框架 WebGL 渲染引擎">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://abalone27.github.io/Users/baoyuxiang/Library/Application%20Support/typora-user-images/%E6%88%AA%E5%B1%8F2024-10-17%2019.08.46.png">
+    <meta http-equiv="Cache-control" content="no-cache">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <link rel="icon" href="/assets/favicon.ico">
+    <title>Three.Js简介 · YuxiangBao&#39;s Studio</title>
+    <!-- /*! loadCSS. [c]2017 Filament Group, Inc. MIT License */
+/* This file is meant as a standalone workflow for
+- testing support for link[rel=preload]
+- enabling async CSS loading in browsers that do not support rel=preload
+- applying rel preload css once loaded, whether supported or not.
+*/ -->
+<script>
+    (function (w) {
+        'use strict'
+        // rel=preload support test
+        if (!w.loadCSS) {
+            w.loadCSS = function () {}
+        }
+        // define on the loadCSS obj
+        var rp = (loadCSS.relpreload = {})
+        // rel=preload feature support test
+        // runs once and returns a function for compat purposes
+        rp.support = (function () {
+            var ret
+            try {
+                ret = w.document.createElement('link').relList.supports('preload')
+            } catch (e) {
+                ret = false
+            }
+            return function () {
+                return ret
+            }
+        })()
+
+        // if preload isn't supported, get an asynchronous load by using a non-matching media attribute
+        // then change that media back to its intended value on load
+        rp.bindMediaToggle = function (link) {
+            // remember existing media attr for ultimate state, or default to 'all'
+            var finalMedia = link.media || 'all'
+
+            function enableStylesheet() {
+                link.media = finalMedia
+            }
+
+            // bind load handlers to enable media
+            if (link.addEventListener) {
+                link.addEventListener('load', enableStylesheet)
+            } else if (link.attachEvent) {
+                link.attachEvent('onload', enableStylesheet)
+            }
+
+            // Set rel and non-applicable media type to start an async request
+            // note: timeout allows this to happen async to let rendering continue in IE
+            setTimeout(function () {
+                link.rel = 'stylesheet'
+                link.media = 'only x'
+            })
+            // also enable media after 3 seconds,
+            // which will catch very old browsers (android 2.x, old firefox) that don't support onload on link
+            setTimeout(enableStylesheet, 3000)
+        }
+
+        // loop through link elements in DOM
+        rp.poly = function () {
+            // double check this to prevent external calls from running
+            if (rp.support()) {
+                return
+            }
+            var links = w.document.getElementsByTagName('link')
+            for (var i = 0; i < links.length; i++) {
+                var link = links[i]
+                // qualify links to those with rel=preload and as=style attrs
+                if (
+                    link.rel === 'preload' &&
+                    link.getAttribute('as') === 'style' &&
+                    !link.getAttribute('data-loadcss')
+                ) {
+                    // prevent rerunning on link
+                    link.setAttribute('data-loadcss', true)
+                    // bind listeners to toggle media back
+                    rp.bindMediaToggle(link)
+                }
+            }
+        }
+
+        // if unsupported, run the polyfill
+        if (!rp.support()) {
+            // run once at least
+            rp.poly()
+
+            // rerun poly on an interval until onload
+            var run = w.setInterval(rp.poly, 500)
+            if (w.addEventListener) {
+                w.addEventListener('load', function () {
+                    rp.poly()
+                    w.clearInterval(run)
+                })
+            } else if (w.attachEvent) {
+                w.attachEvent('onload', function () {
+                    rp.poly()
+                    w.clearInterval(run)
+                })
+            }
+        }
+
+        // commonjs
+        if (typeof exports !== 'undefined') {
+            exports.loadCSS = loadCSS
+        } else {
+            w.loadCSS = loadCSS
+        }
+    })(typeof global !== 'undefined' ? global : this)
+</script>
+
+    <style type="text/css">
+    @font-face {
+        font-family: 'Oswald-Regular';
+        src: url("/font/Oswald-Regular.ttf");
+    }
+
+    body {
+        margin: 0;
+    }
+
+    header,
+    footer,
+    .footer-fixed-btn,
+    .sidebar,
+    .container,
+    .site-intro-meta,
+    .toc-wrapper {
+        display: none;
+    }
+
+    .site-intro {
+        position: relative;
+        z-index: 3;
+        width: 100%;
+        /* height: 50vh; */
+        overflow: hidden;
+    }
+
+    .site-intro-placeholder {
+        position: absolute;
+        z-index: -2;
+        top: 0;
+        left: 0;
+        width: calc(100% + 300px);
+        height: 100%;
+        background: repeating-linear-gradient(
+            -45deg,
+            #444 0,
+            #444 80px,
+            #333 80px,
+            #333 160px
+        );
+        background-position: center center;
+        transform: translate3d(-226px, 0, 0);
+        animation: gradient-move 2.5s ease-out 0s infinite;
+    }
+
+    @keyframes gradient-move {
+        0% {
+            transform: translate3d(-226px, 0, 0);
+        }
+        100% {
+            transform: translate3d(0, 0, 0);
+        }
+    }
+</style>
+
+    <link id="stylesheet-fancybox" rel="preload" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.36/dist/fancybox/fancybox.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link id="stylesheet-base" rel="preload" href="/css/style.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link id="stylesheet-mobile" rel="preload" href="/css/mobile.css" as="style" onload="this.onload=null;this.rel='stylesheet';this.media='screen and (max-width: 960px)'">
+    <link id="stylesheet-theme-dark" rel="preload" href="/css/dark.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" as="script">
+    <link rel="preload" href="/scripts/main.js" as="script">
+    <link rel="preload" href="/font/Oswald-Regular.ttf" as="font" crossorigin>
+    <link rel="preload" href="https://at.alicdn.com/t/font_327081_1dta1rlogw17zaor.woff" as="font" crossorigin>
+    <!-- algolia -->
+    <!-- 百度统计  -->
+    <!-- 谷歌统计  -->
+    <!-- Google tag (gtag.js) -->
+<meta name="generator" content="Hexo 7.3.0">
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+<link rel="alternate" href="/atom.xml" title="Abalone27s Blog" type="application/atom+xml">
+</head>
+
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+    <script type="text/javascript">
+        if (typeof window.$ == undefined) {
+            console.warn('jquery load from jsdelivr failed, will load local script')
+            document.write('<script src="/lib/jquery.min.js" />')
+        }
+    </script>
+        <body class="post-body">
+        <!-- header -->
+        <header class="header header-mobile">
+    <!-- top read progress line -->
+    <div class="header-element">
+        <div class="read-progress"></div>
+    </div>
+    <!-- sidebar menu button -->
+    <div class="header-element">
+        <div class="header-sidebar-menu">
+            <div style="padding-left: 1px;">&#xe775;</div>
+        </div>
+    </div>
+    <!-- header actions -->
+    <div class="header-actions">
+        <!-- theme mode switch button -->
+        <span class="header-theme-btn header-element">
+            <i class="fas fa-adjust"></i>
+        </span>
+        <!-- back to home page text -->
+        <span class="home-link header-element">
+            <a href="/">YuxiangBao's Studio.</a>
+        </span>
+    </div>
+    <!-- toggle banner -->
+    <div class="banner">
+        <div class="blog-title header-element">
+            <a href="/">YuxiangBao&#39;s Studio.</a>
+        </div>
+        <div class="post-title header-element">
+            <a href="#" class="post-name">Three.Js简介</a>
+        </div>
+    </div>
+</header>
+
+        <!-- fixed footer -->
+        <footer class="footer-fixed">
+    <!-- donate button -->
+
+    <!-- back to top button -->
+    <div class="footer-fixed-btn footer-fixed-btn--hidden back-top">
+        <div>&#xe639;</div>
+    </div>
+</footer>
+
+        <!-- wrapper -->
+        <div class="wrapper">
+            <div class="site-intro" style="    height:50vh;
+">
+    <!-- 主页  -->
+    <!-- 404页  -->
+    <div class="site-intro-placeholder"></div>
+    <div class="site-intro-img" style="background-image: url(/intro/post-bg.jpg)"></div>
+    <div class="site-intro-meta">
+        <!-- 标题  -->
+        <h1 class="intro-title">
+            <!-- 主页  -->
+                Three.Js简介
+            <!-- 404 -->
+        </h1>
+        <!-- 副标题 -->
+        <p class="intro-subtitle">
+            <!-- 主页副标题  -->
+            <!-- 404 -->
+        </p>
+        <!-- 文章页 meta -->
+            <div class="post-intros">
+                <!-- 文章页标签  -->
+                    <div class="post-intro-tags" >
+        <a class="post-tag" href="javascript:void(0);" data-tags="前端 javascript框架 WebGL 渲染引擎">前端 javascript框架 WebGL 渲染引擎</a>
+</div>
+
+                <!-- 文章字数统计 -->
+                    <div class="post-intro-read">
+                        <span>字数统计: <span class="post-count word-count">1.9k</span>阅读时长: <span class="post-count reading-time">7 min</span></span>
+                    </div>
+                <div class="post-intro-meta">
+                    <!-- 撰写日期 -->
+                    <span class="iconfont-archer post-intro-calander">&#xe676;</span>
+                    <span class="post-intro-time">2024/10/21</span>
+                    <!-- busuanzi -->
+                        <span id="busuanzi_container_page_pv" class="busuanzi-pv">
+                            <span class="iconfont-archer post-intro-busuanzi">&#xe602;</span>
+                            <span id="busuanzi_value_page_pv"></span>
+                        </span>
+                    <!-- 文章分享 -->
+                    <span class="share-wrapper">
+                        <span class="iconfont-archer share-icon">&#xe71d;</span>
+                        <span class="share-text">Share</span>
+                        <ul class="share-list">
+                            <li class="iconfont-archer share-qr" data-type="qr">&#xe75b;
+                                <div class="share-qrcode"></div>
+                            </li>
+                            <li class="iconfont-archer" data-type="weibo">&#xe619;</li>
+                            <li class="iconfont-archer" data-type="qzone">&#xe62e;</li>
+                            <li class="iconfont-archer" data-type="twitter">&#xe634;</li>
+                            <li class="iconfont-archer" data-type="facebook">&#xe67a;</li>
+                        </ul>
+                    </span>
+                </div>
+            </div>
+    </div>
+</div>
+
+            <script>
+  // get user agent
+  function getBrowserVersions() {
+    var u = window.navigator.userAgent
+    return {
+      userAgent: u,
+      trident: u.indexOf('Trident') > -1, //IE内核
+      presto: u.indexOf('Presto') > -1, //opera内核
+      webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核
+      gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1, //火狐内核
+      mobile: !!u.match(/AppleWebKit.*Mobile.*/), //是否为移动终端
+      ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
+      android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1, //android终端或者uc浏览器
+      iPhone: u.indexOf('iPhone') > -1 || u.indexOf('Mac') > -1, //是否为iPhone或者安卓QQ浏览器
+      iPad: u.indexOf('iPad') > -1, //是否为iPad
+      webApp: u.indexOf('Safari') == -1, //是否为web应用程序，没有头部与底部
+      weixin: u.indexOf('MicroMessenger') == -1, //是否为微信浏览器
+      uc: u.indexOf('UCBrowser') > -1, //是否为android下的UC浏览器
+    }
+  }
+  var browser = {
+    versions: getBrowserVersions(),
+  }
+  console.log('userAgent: ' + browser.versions.userAgent)
+
+  // callback
+  function fontLoaded() {
+    console.log('font loaded')
+    if (document.getElementsByClassName('site-intro-meta')) {
+      document
+        .getElementsByClassName('intro-title')[0]
+        .classList.add('intro-fade-in')
+      document
+        .getElementsByClassName('intro-subtitle')[0]
+        .classList.add('intro-fade-in')
+      var postIntros = document.getElementsByClassName('post-intros')[0]
+      if (postIntros) {
+        postIntros.classList.add('post-fade-in')
+      }
+    }
+  }
+
+  // UC不支持跨域，所以直接显示
+  function asyncCb() {
+    if (browser.versions.uc) {
+      console.log('UCBrowser')
+      fontLoaded()
+    } else {
+      WebFont.load({
+        custom: {
+          families: ['Oswald-Regular'],
+        },
+        loading: function () {
+          // 所有字体开始加载
+          // console.log('font loading');
+        },
+        active: function () {
+          // 所有字体已渲染
+          fontLoaded()
+        },
+        inactive: function () {
+          // 字体预加载失败，无效字体或浏览器不支持加载
+          console.log('inactive: timeout')
+          fontLoaded()
+        },
+        timeout: 5000, // Set the timeout to two seconds
+      })
+    }
+  }
+
+  function asyncErr() {
+    console.warn('script load from CDN failed, will load local script')
+  }
+
+  // load webfont-loader async, and add callback function
+  function async(u, cb, err) {
+    var d = document,
+      t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0]
+    o.src = u
+    if (cb) {
+      o.addEventListener(
+        'load',
+        function (e) {
+          cb(null, e)
+        },
+        false
+      )
+    }
+    if (err) {
+      o.addEventListener(
+        'error',
+        function (e) {
+          err(null, e)
+        },
+        false
+      )
+    }
+    s.parentNode.insertBefore(o, s)
+  }
+
+  var asyncLoadWithFallBack = function (arr, success, reject) {
+    var currReject = function () {
+      reject()
+      arr.shift()
+      if (arr.length) async(arr[0], success, currReject)
+    }
+
+    async(arr[0], success, currReject)
+  }
+
+  asyncLoadWithFallBack(
+    [
+      'https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.min.js',
+      'https://cdn.bootcss.com/webfont/1.6.28/webfontloader.js',
+      "/lib/webfontloader.min.js",
+    ],
+    asyncCb,
+    asyncErr
+  )
+</script>
+
+            <img class="loading" src="/assets/loading.svg" style="display: block; margin: 6rem auto 0 auto; width: 6rem; height: 6rem;" alt="loading">
+            <div class="container container-unloaded">
+                <main class="main post-page">
+    <article class="article-entry">
+        <h1 id="Three-Js-介绍"><a href="#Three-Js-介绍" class="headerlink" title="Three.Js 介绍"></a>Three.Js 介绍</h1><p>Three.js由Ricardo Cabello在2010四月于GitHub首次发布。</p>
+<p><img src="data:image/png;base64,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" alt="JavaScriptの3Dライブラリ”three.js”を使って遊 ..."></p>
+<p>Three.js是一个跨浏览器的使用JavaScript函数库或API来在网页浏览器中创建和展示三维计算机图形的开源通用 3D 代码库。Three.js使用WebGL渲染图形，也可通过插件使用 WebGPU（实验性）、SVG 和 CSS3D 渲染器。源代码托管在GitHub。</p>
+<h2 id="Installation"><a href="#Installation" class="headerlink" title="Installation"></a>Installation</h2><p>每个 three.js 项目至少需要一个 HTML 文件来定义网页，以及一个 JavaScript 文件来运行你的 three.js 代码。下面的结构和命名选择并非必需，但为了保持一致性，本指南将在全文中使用。</p>
+<ul>
+<li><p><code>index.html</code></p>
+<figure class="highlight html"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE <span class="keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">"en"</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"utf-8"</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">title</span>&gt;</span>My first three.js app<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">style</span>&gt;</span><span class="language-css"></span></span><br><span class="line"><span class="language-css">			<span class="selector-tag">body</span> { <span class="attribute">margin</span>: <span class="number">0</span>; }</span></span><br><span class="line"><span class="language-css">		</span><span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">"module"</span> <span class="attr">src</span>=<span class="string">"/main.js"</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></tbody></table></figure>
+
+
+</li>
+<li><p><code>main.js</code></p>
+<figure class="highlight js"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> * <span class="keyword">as</span> <span class="variable constant_">THREE</span> <span class="keyword">from</span> <span class="string">'three'</span>;</span><br><span class="line"></span><br><span class="line">...</span><br></pre></td></tr></tbody></table></figure>
+
+
+</li>
+<li><p><code>public/</code></p>
+<ul>
+<li><em>public/</em> 文件夹有时也被称为 “静态（static）”文件夹，因为其中包含的文件会原封不动地推送到网站上。纹理（textures）、音频和 3D 模型通常会放在这里。</li>
+</ul>
+<h2 id="Creating-a-Scene"><a href="#Creating-a-Scene" class="headerlink" title="Creating a Scene"></a>Creating a Scene</h2><figure class="highlight js"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> * <span class="keyword">as</span> <span class="variable constant_">THREE</span> <span class="keyword">from</span> <span class="string">"three"</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> scene = <span class="keyword">new</span> <span class="variable constant_">THREE</span>.<span class="title class_">Scene</span>()</span><br><span class="line"><span class="keyword">const</span> camera = <span class="keyword">new</span> <span class="variable constant_">THREE</span>.<span class="title class_">PerspectiveCamera</span>(<span class="number">75</span>,<span class="variable language_">window</span>.<span class="property">innerWidth</span>/<span class="variable language_">window</span>.<span class="property">innerHeight</span>,<span class="number">0.1</span>,<span class="number">1000</span>) </span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> renderer =<span class="keyword">new</span> <span class="variable constant_">THREE</span>.<span class="title class_">WebGLRenderer</span>()</span><br><span class="line">renderer.<span class="title function_">setSize</span>(<span class="variable language_">window</span>.<span class="property">innerWidth</span>,<span class="variable language_">window</span>.<span class="property">innerHeight</span>)</span><br><span class="line"><span class="variable language_">document</span>.<span class="property">body</span>.<span class="title function_">appendChild</span>(renderer.<span class="property">domElement</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> geometry = <span class="keyword">new</span> <span class="variable constant_">THREE</span>.<span class="title class_">BoxGeometry</span>(<span class="number">1</span>,<span class="number">1</span>,<span class="number">1</span>)</span><br><span class="line"><span class="keyword">const</span> material = <span class="keyword">new</span> <span class="variable constant_">THREE</span>.<span class="title class_">MeshBasicMaterial</span>({<span class="attr">color</span>:<span class="number">0x00ff00</span>})</span><br><span class="line"><span class="keyword">const</span> cube = <span class="keyword">new</span> <span class="variable constant_">THREE</span>.<span class="title class_">Mesh</span>(geometry,material)</span><br><span class="line">scene.<span class="title function_">add</span>(cube)</span><br><span class="line"></span><br><span class="line">camera.<span class="property">position</span>.<span class="property">z</span>=<span class="number">5</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">animate</span>(<span class="params"></span>) {</span><br><span class="line">    <span class="title function_">requestAnimationFrame</span>(animate)</span><br><span class="line">    cube.<span class="property">rotation</span>.<span class="property">x</span> += <span class="number">0.01</span></span><br><span class="line">    cube.<span class="property">rotation</span>.<span class="property">y</span> += <span class="number">0.02</span></span><br><span class="line">    renderer.<span class="title function_">render</span>(scene,camera)</span><br><span class="line">}</span><br><span class="line"><span class="title function_">animate</span>()</span><br></pre></td></tr></tbody></table></figure>
+
+<ul>
+<li>以上这行代码创建了一个不断旋转的正方体。</li>
+<li><img src="/Users/baoyuxiang/Library/Application Support/typora-user-images/截屏2024-10-17 19.08.46.png" alt="截屏2024-10-17 19.08.46" style="zoom:50%;"></li>
+</ul>
+</li>
+</ul>
+<h2 id="解释代码"><a href="#解释代码" class="headerlink" title="解释代码"></a>解释代码</h2><p>我们花一点点时间来解释一下这里发生了什么。我们现在建立了场景、相机和渲染器。</p>
+<p>three.js 里有几种不同的相机，在这里，我们使用的是 <strong>PerspectiveCamera</strong>（透视摄像机）。</p>
+<p>第一个参数是<strong>视野角度（FOV）</strong>。视野角度就是无论在什么时候，你所能在显示器上看到的场景的范围，它的单位是角度(与弧度区分开)。</p>
+<p>第二个参数是<strong>长宽比（aspect ratio）</strong>。 也就是你用一个物体的宽除以它的高的值。比如说，当你在一个宽屏电视上播放老电影时，可以看到图像仿佛是被压扁的。</p>
+<p>接下来的两个参数是<strong>近截面</strong>（near）和<strong>远截面</strong>（far）。 当物体某些部分比摄像机的<strong>远截面</strong>远或者比<strong>近截面</strong>近的时候，该这些部分将不会被渲染到场景中。或许现在你不用担心这个值的影响，但未来为了获得更好的渲染性能，你将可以在你的应用程序里去设置它。</p>
+<p>接下来是渲染器。这里是施展魔法的地方。除了我们在这里用到的 WebGLRenderer 渲染器之外，Three.js 同时提供了其他几种渲染器，当用户所使用的浏览器过于老旧，或者由于其他原因不支持 WebGL 时，可以使用这几种渲染器进行降级。</p>
+<p>除了创建一个渲染器的实例之外，我们还需要在我们的应用程序里设置一个渲染器的尺寸。比如说，我们可以使用所需要的渲染区域的宽高，来让渲染器渲染出的场景填充满我们的应用程序。因此，我们可以将渲染器宽高设置为浏览器窗口宽高。对于性能比较敏感的应用程序来说，你可以使用 <strong>setSize</strong> 传入一个较小的值，例如 <strong>window.innerWidth/2</strong> 和 <strong>window.innerHeight/2</strong>，这将使得应用程序在渲染时，以一半的长宽尺寸渲染场景。</p>
+<p>如果你希望保持你的应用程序的尺寸，但是以较低的分辨率来渲染，你可以在调用 <strong>setSize</strong> 时，将 <strong>updateStyle</strong>（第三个参数）设为 false。例如，假设你的 <canvas> 标签现在已经具有了 100% 的宽和高，调用 <strong>setSize(window.innerWidth/2, window.innerHeight/2, false)</strong> 将使得你的应用程序以四分之一的大小来进行渲染。</canvas></p>
+<p>最后一步很重要，我们将 <strong>renderer</strong>（渲染器）的dom元素（renderer.domElement）添加到我们的 HTML 文档中。这就是渲染器用来显示场景给我们看的 <canvas> 元素。</canvas></p>
+<p>要创建一个立方体，我们需要一个 <strong>BoxGeometry</strong>（立方体）对象. 这个对象包含了一个立方体中所有的顶点（<strong>vertices</strong>）和面（<strong>faces</strong>）。未来我们将在这方面进行更多的探索。</p>
+<p>接下来，对于这个立方体，我们需要给它一个材质，来让它有颜色。Three.js 自带了几种材质，在这里我们使用的是 <strong>MeshBasicMaterial</strong>。所有的材质都存有应用于他们的属性的对象。在这里为了简单起见，我们只设置一个color属性，值为 <strong>0x00ff00</strong>，也就是绿色。这里所做的事情，和在 CSS 或者 Photoshop 中使用十六进制（<strong>hex colors</strong>）颜色格式来设置颜色的方式一致。</p>
+<p>第三步，我们需要一个 <strong>Mesh</strong>（网格）。 网格包含一个几何体以及作用在此几何体上的材质，我们可以直接将网格对象放入到我们的场景中，并让它在场景中自由移动。</p>
+<p>默认情况下，当我们调用 <strong>scene.add()</strong> 的时候，物体将会被添加到 <strong>(0,0,0)</strong> 坐标。但将使得摄像机和立方体彼此在一起。为了防止这种情况的发生，我们只需要将摄像机稍微向外移动一些即可。</p>
+<h2 id="渲染场景"><a href="#渲染场景" class="headerlink" title="渲染场景"></a>渲染场景</h2><p>现在，如果将之前写好的代码复制到HTML文件中，你不会在页面中看到任何东西。这是因为我们还没有对它进行真正的渲染。为此，我们需要使用一个被叫做“<strong>渲染循环</strong>”（render loop）或者“<strong>动画循环</strong>”（animate loop）的东西。</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">function animate() { requestAnimationFrame( animate ); renderer.render( scene, camera ); } animate();</span><br></pre></td></tr></tbody></table></figure>
+
+<p>在这里我们创建了一个使渲染器能够在每次屏幕刷新时对场景进行绘制的循环（在大多数屏幕上，刷新率一般是60次/秒）。如果你是一个浏览器游戏开发的新手，你或许会说<em>“为什么我们不直接用 setInterval 来实现刷新的功能呢？”</em>当然啦，我们的确可以用 setInterval，但是，<strong>requestAnimationFrame</strong> 有很多的优点。最重要的一点或许就是当用户切换到其它的标签页时，它会暂停，因此不会浪费用户宝贵的处理器资源，也不会损耗电池的使用寿命。</p>
+<h2 id="使立方体动起来"><a href="#使立方体动起来" class="headerlink" title="使立方体动起来"></a>使立方体动起来</h2><p>在开始之前，如果你已经将上面的代码写入到了你所创建的文件中，你可以看到一个绿色的方块。让我们来做一些更加有趣的事 —— 让它旋转起来。</p>
+<p>将下列代码添加到 animate() 函数中 <strong>renderer.render</strong> 调用的上方：</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cube.rotation.x += 0.01; cube.rotation.y += 0.01;</span><br></pre></td></tr></tbody></table></figure>
+
+<p>这段代码每帧都会执行（正常情况下是60次/秒），这就让立方体有了一个看起来很不错的旋转动画。基本上来说，当应用程序运行时，如果你想要移动或者改变任何场景中的东西，都必须要经过这个动画循环。当然，你可以在这个动画循环里调用别的函数，这样你就不会写出有上百行代码的 <strong>animate</strong> 函数。</p>
+<h2 id="结果"><a href="#结果" class="headerlink" title="结果"></a>结果</h2><p>祝贺你！你现在已经成功完成了你的第一个 three.js 应用程序。虽然它很简单，但现在你已经有了一个入门的起点。</p>
+
+    </article>
+    <!-- license -->
+        <div class="license-wrapper">
+            <p>原文作者：<a href="http://Abalone27.github.io">Bao YuXiang</a>
+            <p>原文链接：<a href="http://abalone27.github.io/2024/10/21/three-js-jian-jie/">http://abalone27.github.io/2024/10/21/three-js-jian-jie/</a>
+            <p>发表日期：<a href="http://abalone27.github.io/2024/10/21/three-js-jian-jie/">October 21st 2024, 4:33:28 pm</a>
+            <p>更新日期：<a href="http://abalone27.github.io/2024/10/21/three-js-jian-jie/">October 21st 2024, 4:35:30 pm</a>
+            <p>版权声明：本文采用<a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc/4.0/">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可</p>
+        </div>
+    <!-- paginator -->
+    <ul class="post-paginator">
+        <li class="next">
+        </li>
+        <li class="previous">
+                <div class="prevSlogan">Previous Post</div>
+                <a href="/2024/10/21/axios-jian-jie/" title="axios简介">
+                    <div class="prevTitle">axios简介</div>
+                </a>
+        </li>
+    </ul>
+    <!-- comment -->
+        <div class="post-comment">
+            <!-- 来必力 City 版安装代码 -->
+
+            
+            
+            
+            <!-- utteranc评论 -->
+
+            <!-- partial('_partial/comment/changyan') -->
+            <!--PC版-->
+
+            
+            
+            
+        </div>
+    <!-- timeliness note -->
+    <!-- idea from: https://hexo.fluid-dev.com/posts/hexo-injector/#%E6%96%87%E7%AB%A0%E6%97%B6%E6%95%88%E6%80%A7%E6%8F%90%E7%A4%BA -->
+    <!-- Mathjax -->
+</main>
+
+                <!-- profile -->
+            </div>
+            <footer class="footer footer-unloaded">
+    <!-- social  -->
+        <div class="social">
+                            <a href="mailto:522425561@qq.com" class="iconfont-archer email" title="email" ></a>
+                <a href="//github.com/Abalone27" class="iconfont-archer github" target="_blank" title="github"></a>
+                <span class="iconfont-archer wechat" title="wechat">
+                    <img class="profile-qr" src="/assets/wechat_profile.png" />
+                </span>
+                <span class="iconfont-archer qq" title="qq">
+                    <img class="profile-qr" src="/assets/qq_profile.png" />
+                </span>
+                <a href="/18702106887" class="iconfont-archer telegram" target="_blank" title="telegram"></a>
+                <a href="/atom.xml" class="iconfont-archer rss" target="_blank" title="rss"></a>
+
+        </div>
+    <!-- powered by Hexo  -->
+    <div class="copyright">
+        <span id="hexo-power">Powered by <a href="https://hexo.io/" target="_blank">Hexo</a></span><span class="iconfont-archer power">&#xe635;</span><span id="theme-info">theme <a href="https://github.com/fi3ework/hexo-theme-archer" target="_blank">Archer</a></span>
+    </div>
+    <!-- website approve for Chinese user -->
+    <!-- 不蒜子  -->
+        <div class="busuanzi-container">
+                <span id="busuanzi_container_site_pv">PV: <span id="busuanzi_value_site_pv"></span> :)</span>
+        </div>
+</footer>
+
+        </div>
+        <!-- toc -->
+            <div class="toc-wrapper toc-wrapper-loding" style=    top:50vh;
+>
+                <div class="toc-catalog">
+                    <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
+                </div>
+                <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Three-Js-%E4%BB%8B%E7%BB%8D"><span class="toc-number">1.</span> <span class="toc-text">Three.Js 介绍</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Installation"><span class="toc-number">1.1.</span> <span class="toc-text">Installation</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Creating-a-Scene"><span class="toc-number">1.2.</span> <span class="toc-text">Creating a Scene</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A7%A3%E9%87%8A%E4%BB%A3%E7%A0%81"><span class="toc-number">1.3.</span> <span class="toc-text">解释代码</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B8%B2%E6%9F%93%E5%9C%BA%E6%99%AF"><span class="toc-number">1.4.</span> <span class="toc-text">渲染场景</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%AB%8B%E6%96%B9%E4%BD%93%E5%8A%A8%E8%B5%B7%E6%9D%A5"><span class="toc-number">1.5.</span> <span class="toc-text">使立方体动起来</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BB%93%E6%9E%9C"><span class="toc-number">1.6.</span> <span class="toc-text">结果</span></a></li></ol></li></ol>
+            </div>
+        <!-- sidebar -->
+        <div class="sidebar sidebar-hide">
+    <ul class="sidebar-tabs sidebar-tabs-active-0">
+        <li class="sidebar-tab-archives"><span class="iconfont-archer">&#xe67d;</span><span class="tab-name">Archive</span></li>
+        <li class="sidebar-tab-tags"><span class="iconfont-archer">&#xe61b;</span><span class="tab-name">Tag</span></li>
+        <li class="sidebar-tab-categories"><span class="iconfont-archer">&#xe666;</span><span class="tab-name">Cate</span></li>
+    </ul>
+    <div class="sidebar-content sidebar-content-show-archive">
+        <div class="sidebar-panel-archives">
+    <!-- 在 ejs 中将 archive 按照时间排序 -->
+        
+        
+        
+    <div class="total-and-search">
+        <div class="total-archive">
+        Total : 3
+        </div>
+        <!-- search  -->
+    </div>
+    <div class="post-archive">
+            <div class="archive-year"> 2024 </div>
+            <ul class="year-list">
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/21</span>
+            <a class="archive-post-title" href="/2024/10/21/three-js-jian-jie/">Three.Js简介</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/21</span>
+            <a class="archive-post-title" href="/2024/10/21/axios-jian-jie/">axios简介</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/21</span>
+            <a class="archive-post-title" href="/2024/10/21/ji-suan-ji-fen-zhi/">计算机科学分支 CS Map</a>
+        </li>
+            </ul>
+    </div>
+</div>
+
+        <div class="sidebar-panel-tags">
+    <div class="sidebar-tags-name">
+            <span class="sidebar-tag-name" data-tags="前端 javascript框架 WebGL 渲染引擎">
+                <span class="iconfont-archer">&#xe606;</span>
+                前端 javascript框架 WebGL 渲染引擎
+            </span>
+            <span class="sidebar-tag-name" data-tags="前端 ajax 异步 javascript">
+                <span class="iconfont-archer">&#xe606;</span>
+                前端 ajax 异步 javascript
+            </span>
+            <span class="sidebar-tag-name" data-tags="计算机科学导航">
+                <span class="iconfont-archer">&#xe606;</span>
+                计算机科学导航
+            </span>
+    </div>
+    <div class="iconfont-archer sidebar-tags-empty">&#xe678;</div>
+    <div class="tag-load-fail" style="display: none; color: #ccc; font-size: 0.6rem;">
+        缺失模块，请参考主题文档进行安装配置：https://github.com/fi3ework/hexo-theme-archer#%E5%AE%89%E8%A3%85%E4%B8%BB%E9%A2%98
+    </div> 
+    <div class="sidebar-tags-list"></div>
+</div>
+
+        <div class="sidebar-panel-categories">
+    <div class="sidebar-categories-name">
+        <span class="sidebar-category-name" data-categories="前端">
+            <span class="iconfont-archer">&#xe60a;</span>
+            前端
+        </span>
+        <span class="sidebar-category-name" data-categories="计算机科学">
+            <span class="iconfont-archer">&#xe60a;</span>
+            计算机科学
+        </span>
+    </div>
+    <div class="iconfont-archer sidebar-categories-empty">&#xe678;</div>
+    <div class="sidebar-categories-list"></div>
+</div>
+
+    </div>
+</div>
+
+        <!-- site-meta -->
+        <script>
+    var siteMetaRoot = "/"
+    if (siteMetaRoot === "undefined") {
+        siteMetaRoot = '/'
+    }
+    var siteMeta = {
+        url: "http://Abalone27.github.io",
+        root: siteMetaRoot,
+        author: "Bao YuXiang"
+    }
+</script>
+
+        <!-- import experimental options here -->
+        <!-- Custom Font -->
+
+        <!-- main func -->
+        <script src="/scripts/main.js"></script>
+        <!-- fancybox -->
+        <script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.36/dist/fancybox/fancybox.umd.js" onload="window.Fancybox.bind('[data-fancybox]')" defer></script>
+        <!-- algolia -->
+        <!-- busuanzi -->
+            <script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script>
+        <!-- async load share.js -->
+            <script src="/scripts/share.js" async></script>
+        <!-- mermaid -->
+    </body>
+</html>
