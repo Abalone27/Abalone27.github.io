@@ -21,7 +21,7 @@
 <meta property="og:image" content="http://abalone27.github.io/images/jpeg-1.png">
 <meta property="og:image" content="http://abalone27.github.io/2024/10/22/zui-chang-jian-de-tu-xiang-ya-suo-suan-fa-jpeg/images/jpeg-2.png">
 <meta property="article:published_time" content="2024-10-22T08:22:03.000Z">
-<meta property="article:modified_time" content="2024-10-22T08:50:55.993Z">
+<meta property="article:modified_time" content="2024-10-22T15:03:22.608Z">
 <meta property="article:author" content="Bao YuXiang">
 <meta property="article:tag" content="JPEG">
 <meta property="article:tag" content="数字图像处理">
@@ -509,9 +509,34 @@
 <li><p>根据哈夫曼树<strong>生成哈夫曼表</strong>，从根节点到每个叶子节点的路径决定了该符号的哈夫曼编码。通常，向左分支记为0，向右分支记为1。</p>
 </li>
 </ol>
-<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">graph TD</span><br><span class="line">Root[100]</span><br><span class="line">Root --&gt; A[45]</span><br><span class="line">Root --&gt; CBFED[55]</span><br><span class="line">CBFED --&gt; CB[25]</span><br><span class="line">CBFED --&gt; FED[30]</span><br><span class="line">CB --&gt; C[12]</span><br><span class="line">CB --&gt; B[13]</span><br><span class="line">FED --&gt; FE[14]</span><br><span class="line">FED --&gt; D[16]</span><br><span class="line">FE --&gt; F[5]</span><br><span class="line">FE --&gt; E[9]</span><br></pre></td></tr></tbody></table></figure>
+<pre class="mermaid">graph TD
+Root[100]
+Root --&gt; A[45]
+Root --&gt; CBFED[55]
+CBFED --&gt; CB[25]
+CBFED --&gt; FED[30]
+CB --&gt; C[12]
+CB --&gt; B[13]
+FED --&gt; FE[14]
+FED --&gt; D[16]
+FE --&gt; F[5]
+FE --&gt; E[9]</pre>
 
-<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">classDiagram</span><br><span class="line">class HuffmanTable {</span><br><span class="line">    +Symbol : A</span><br><span class="line">    +Code : 0</span><br><span class="line">    +Symbol : B</span><br><span class="line">    +Code : 101</span><br><span class="line">    +Symbol : C</span><br><span class="line">    +Code : 100</span><br><span class="line">    +Symbol : D</span><br><span class="line">    +Code : 111</span><br><span class="line">    +Symbol : E</span><br><span class="line">    +Code : 1101</span><br><span class="line">    +Symbol : F</span><br><span class="line">    +Code : 1100</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<pre class="mermaid">classDiagram
+class HuffmanTable {
+    +Symbol : A
+    +Code : 0
+    +Symbol : B
+    +Code : 101
+    +Symbol : C
+    +Code : 100
+    +Symbol : D
+    +Code : 111
+    +Symbol : E
+    +Code : 1101
+    +Symbol : F
+    +Code : 1100
+}</pre>
 
 <h4 id="H-264"><a href="#H-264" class="headerlink" title="H.264"></a>H.264</h4><p>​	然而，H.264显然更加复杂，因为它不是像JPEG那样压缩单一的静态图像。每30帧使用iFrame（JPEG），而其他29帧使用预测或双向预测,只对差异和运动进行编码，同时使用先前解码的帧作为参考。</p>
 <h4 id="重构图片过程"><a href="#重构图片过程" class="headerlink" title="重构图片过程"></a>重构图片过程</h4><ul>
@@ -542,7 +567,7 @@
             <p>原文作者：<a href="http://Abalone27.github.io">Bao YuXiang</a>
             <p>原文链接：<a href="http://abalone27.github.io/2024/10/22/zui-chang-jian-de-tu-xiang-ya-suo-suan-fa-jpeg/">http://abalone27.github.io/2024/10/22/zui-chang-jian-de-tu-xiang-ya-suo-suan-fa-jpeg/</a>
             <p>发表日期：<a href="http://abalone27.github.io/2024/10/22/zui-chang-jian-de-tu-xiang-ya-suo-suan-fa-jpeg/">October 22nd 2024, 4:22:03 pm</a>
-            <p>更新日期：<a href="http://abalone27.github.io/2024/10/22/zui-chang-jian-de-tu-xiang-ya-suo-suan-fa-jpeg/">October 22nd 2024, 4:50:55 pm</a>
+            <p>更新日期：<a href="http://abalone27.github.io/2024/10/22/zui-chang-jian-de-tu-xiang-ya-suo-suan-fa-jpeg/">October 22nd 2024, 11:03:22 pm</a>
             <p>版权声明：本文采用<a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可</p>
         </div>
     <!-- paginator -->
